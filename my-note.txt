@@ -1,0 +1,123 @@
+Note học NextJS. Chapter:
+1.
+- Download và đọc cấu trúc file.
+2.
+- File global.css sẽ apply cho tất cả.
+- Chủ yếu dùng Tailwind.
+- CSS module để mình khai báo css locally.
+- Dùng clsx để switch css class hiệu quả. 
+3.
+- Next tự hào là nó optimize font bằng cách tải về sẵn khi build time, ko còn vụ layout bị dịch chuyển do swap font mặc định (khi mới mở web) sang custom font của mình.
+- Next tự hào là nó optimize image bằng cách dùng component "next/image" của nó. Nêu nhiều lí do để optimize img, ex: scroll đến nó thì mới load (lazy load).
+4.
+- Next.js uses file-system routing where folders are used to create nested routes.
+- page.tsx is a special Next.js file that exports a React component, and it's required for the route to be accessible.
+- A special layout.tsx file to create UI that is shared between multiple pages
+- The <Layout /> component receives a children prop. This child can either be a page or another layout. All pages/layouts that in the same folder with layout.tsx are it's child.
+=> On navigation, only the page components update while the layout won't re-render. This is called partial rendering which preserves client-side React state in the layout when transitioning between pages.
+5.
+- Next nói thẻ <a> thông thường sẽ load lại toàn trang. Còn component "next/link" của nó thì để "client-side navigation".
+- Nó khoe component Link của nó splits your application by route segments. Mang lại nhiều lợi ích, ex: prefetch linked page trước khi link nằm trong viewport để nếu click sẽ load nhanh hơn.
+- Giới thiệu usePathname() hook của react để lấy website URL hiện tại, đi kèm 'use client'; để dùng.
+6.
+- Đẩy project lên github, và dùng vercel liên kết với github để lấy và deploy project đó.
+- Tạo database postgre trên Neon, mình đã set mk là: _gvnk9-SSmK6y8G (set vì mình nghĩ fix đc bug nó bảo mình cần nhập pass vercel, ai ngờ logout rồi login vercel lại là đc)
+7.
+- Nó liệt kê 3 cách lấy/tương tác data: 
++ Database query: SQL native hoặc ORM. Cái này có thể dùng trong 2 cái dưới.
++ Dùng API layer: 3rd-party service (Nest, Sail,... server).
+=> But in Next.js, you can create API endpoints using Route Handlers.
++ React Server Components: By default, Next.js applications use React Server Components. Fetching data with Server Components is a relatively new approach, few benefits: 
+.) use async/await syntax without needing useEffect, useState or other data fetching libraries
+.) run on the server, so you can keep expensive data fetches and logic on the server, only sending the result to the client
+.) query the database directly without an additional API layer
+8.
+- Static rendering: data fetching and rendering happens on the server at build time (when you deploy) or when revalidating data. Nhưng nó có rất nhiều lợi ích: nhanh tại load sẵn tại server mà, Reduced Server Load (user nào truy cập nó cũng lấy cached data), SEO (data cứng nên search engine dễ search).
+=> Static rendering is useful for UI with no data or data that is shared across users, such as a static blog post or a product page. 
+- Dynamic rendering: content is rendered on the server for each user at request time (when the user visits the page). Lợi ích nhiều, ex: real time data.
+9. 
+- Streaming is a data transfer technique that allows you to break down a route into smaller "chunks" and progressively stream them from the server to the client as they become ready.
+- Streaming works well with React's component model, as each component can be considered a chunk. Trên UI, cái nào gọi API xong thì nó load lên trước cho user interact trước, siêu đã.
+- There are two ways you implement streaming in Next.js:
++ At the page level, with the loading.tsx file (which creates <Suspense> for you).
++ At the component level, with <Suspense> for more granular control.
+- Streaming the whole page: loading.tsx is a special Next.js file built on top of React Suspense. It allows you to create fallback UI to show as a replacement while page content loads.
+=> Vì file dashboard/loading.tsx có level to hơn 2 page dashboard/invoices/page.tsx và dashboard/customers/page.tsx, nên file loading.tsx sẽ apply cho cả 2 page đó. Nếu ko muốn apply cho 2 page đó, chỉ muốn apply cho /dashboard/page.tsx thôi, thì mình có thể để loading.tsx và page.tsx vào folder /dashboard/(overview)/ (/dashboard/(overview)/loading.tsx và /dashboard/(overview)/page.tsx). Thì cái phần () đó gọi là route group, nó sẽ tự bị xoá trên URL path, dùng để chia application ra nhiều section (e.g. (marketing) routes and (shop) routes) hoặc cho nhiều team deveveloper để dev 1 application lớn.  
+- Streaming a component: dùng component React <Suspense>
+- Dùng <Suspense> ở đâu là tuỳ mình và tuỳ app của mình, mình có thể nhóm 1 cụm 4 cái <Card> và cho vào <CardWrapper> rồi Streaming cho <CardWrapper>, có thể Streaming cả page như phía trên (dùng loading.tsx file), có thể Streaming từng component nhỏ nhất.
+10.
+- Việc search/filter mà có apply lên URL params rất hay: Bookmarkable and shareable URLs, Server-side rendering (server sẽ sợt và filter), ...
+- Client hooks:
++ useSearchParams(): lấy URL query params.
++ usePathname(): lấy URL path.
++ useRouter(): điều hướng route với client component. 
+- "use client" - This is a Client Component, which means you can use event listeners and hooks.
+- prop "searchParams" là built-in prop cho mọi page.tsx, chức năng nó y chang hook useSearchParams() nhưng nó xài cho server component. useSearchParams() thì xài cho client component.
+- 1 cách để apply input debounce là dùng useDebouncedCallback() hook của npm package "use-debounce". 
+- Đối với client component, mình ko nên fetch data trỏng, tại this would expose your database secrets (remember, you're not using an API layer). Instead, you can fetch the data on the server, and pass it to that component as a prop.
+11.
+- React Server Actions là func để chạy đc code async ngay trên server, mình khỏi cần tạo server API làm gì. Func này có thể đc gọi từ Client và Server component.
+- React Server Actions include features like encrypted closures, strict input checks, error message hashing, host restrictions, and more.
+- Nextjs tự hào với thằng <form> trong server component gọi server action, UI chưa cần load JS xong thì form vẫn hoạt động đc.
+- Add 'use server' vào đầu file, thì tất cả các func trong file đó đều là server action, hoặc add 'use server' vào đầu func nào đó bất kì cũng đc, nhưng next khuyến nghị nên để ra 1 file riêng.
+- Next.js has a client-side router cache that stores the route segments in the user's browser for a time. Along with prefetching, this cache ensures that users can quickly navigate between routes while reducing the number of requests made to the server. Ví dụ: cache ds invoice ở route (page) invoice, ảo thật, redis tuổi. 
+- import { revalidatePath } from 'next/cache'; để clear cache ở 1 route URL nào đó. Ví dụ: vừa thêm data vào ds invoice, thì mình cần clear cache ở page ds invoice. 
+=> ỦA CHẢ LẼ PAGE NÀO CÓ DÙNG DS NÀY MÌNH CŨNG PHẢI CLEAR CACHE TAY NHƯ VẬY À? => ko có, mình ko dùng revalidatePath thì nó vẫn update ds mới nhất, hmm...
+- [something] khi đặt tên folder là Dynamic route segment. Vd: dashboard/invoices/[id]/edit/page.tsx
+- prop "params" là built-in prop cho mọi page.tsx, nó dùng để lấy URL params
+- Bỏ id vào như này: <form action={updateInvoice(id)}> sẽ ko work, phải dùng JS bind() (This will ensure that any values passed to the Server Action are encoded.).
+12.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
