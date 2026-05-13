@@ -67,10 +67,11 @@ Note học NextJS. Chapter:
 - prop "params" là built-in prop cho mọi page.tsx, nó dùng để lấy URL params
 - Bỏ id vào như này: <form action={updateInvoice(id)}> sẽ ko work, phải dùng JS bind() (This will ensure that any values passed to the Server Action are encoded.).
 12.
-
-
-
-
+- redirect() ko bỏ trong try/catch đc, vì cách nó hoạt động là throw 1 cái lỗi, nên bỏ vào try là nó catch luôn.
+- Khi UI mình có error, thì nó sẽ bị crash app, mình có thể dùng error.tsx file, 1 file đặc biệt Next dùng để bắt mọi lỗi và show UI friendly. Có thể để nó ở route segment cụ thể và chỉ áp dụng cho route segment đó.
+- Trong file này sẽ có sẵn 2 built in prop, "error" mang thông tin về lỗi bắt đc, hàm reset() để re-render lại route segment.
+- Mình có thể handle riêng cho case 404 not found page bằng hàm notFound() từ pkg 'next/navigation'. Tạo file (page) not-found.tsx ở route segment bạn muốn hiện 404 fallback, thì hàm notFound() trong route segment đó sẽ trigger hiện page này.
+13.
 
 
 
