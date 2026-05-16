@@ -70,7 +70,8 @@ export async function createInvoice(prevState: State, formData: FormData) {
 
   // Xoá cache ở page invoices vì mình vừa update data list mà (add thêm record)
   // Revalidate the cache for the invoices page and redirect the user.
-  revalidatePath("/dashboard/invoices");
+  revalidatePath("/dashboard/invoices"); // dùng cái này thì nó chỉ update page này, ko update /dashboard/pages
+  revalidatePath("/dashboard"); // tạm thời mình dùng thêm cái này cho app mình cho lẹ (nó ko tự động xoá cache cho page con của nó, nên mình vẫn phải có dòng ở trên), dùng revalidateTag sẽ tối ưu hơn
   redirect("/dashboard/invoices");
 }
 
@@ -108,6 +109,7 @@ export async function updateInvoice(
   }
 
   revalidatePath("/dashboard/invoices");
+  revalidatePath("/dashboard");
   redirect("/dashboard/invoices");
 }
 
@@ -118,6 +120,7 @@ export async function deleteInvoice(id: string, prevState: { message: string; } 
     return { message: "Database Error: Failed to Delete Invoice." };
   }
   revalidatePath("/dashboard/invoices");
+  revalidatePath("/dashboard");
 }
 
 export async function authenticate(

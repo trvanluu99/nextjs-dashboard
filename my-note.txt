@@ -62,7 +62,9 @@ Note học NextJS. Chapter:
 - Add 'use server' vào đầu file, thì tất cả các func trong file đó đều là server action, hoặc add 'use server' vào đầu func nào đó bất kì cũng đc, nhưng next khuyến nghị nên để ra 1 file riêng.
 - Next.js has a client-side router cache that stores the route segments in the user's browser for a time. Along with prefetching, this cache ensures that users can quickly navigate between routes while reducing the number of requests made to the server. Ví dụ: cache ds invoice ở route (page) invoice, ảo thật, redis tuổi. 
 - import { revalidatePath } from 'next/cache'; để clear cache ở 1 route URL nào đó. Ví dụ: vừa thêm data vào ds invoice, thì mình cần clear cache ở page ds invoice. 
-=> ỦA CHẢ LẼ PAGE NÀO CÓ DÙNG DS NÀY MÌNH CŨNG PHẢI CLEAR CACHE TAY NHƯ VẬY À? => ko có, mình ko dùng revalidatePath thì nó vẫn update ds mới nhất, hmm...
+=> Ở local ko gọi cái này nó vẫn update data thành mới nhất, nhưng trên production thì ko nhé. Khi sửa 1 record nào đó, mình phải revalidatePath toàn bộ page dùng nó. Rất bất tiện, nên ngta thường xài revalidateTag.
++ revalidatePath: Invalidate specific routes/pages cache.
++ revalidateTag: Invalidate shared data resources cache.
 - [something] khi đặt tên folder là Dynamic route segment. Vd: dashboard/invoices/[id]/edit/page.tsx
 - prop "params" là built-in prop cho mọi page.tsx, nó dùng để lấy URL params
 - Bỏ id vào như này: <form action={updateInvoice(id)}> sẽ ko work, phải dùng JS bind() (This will ensure that any values passed to the Server Action are encoded.).
