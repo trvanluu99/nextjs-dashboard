@@ -72,7 +72,16 @@ Note học NextJS. Chapter:
 - Trong file này sẽ có sẵn 2 built in prop, "error" mang thông tin về lỗi bắt đc, hàm reset() để re-render lại route segment.
 - Mình có thể handle riêng cho case 404 not found page bằng hàm notFound() từ pkg 'next/navigation'. Tạo file (page) not-found.tsx ở route segment bạn muốn hiện 404 fallback, thì hàm notFound() trong route segment đó sẽ trigger hiện page này.
 13.
-
+- Accessibility là thuật ngữ chỉ việc thiết kế, triển khai web ai cũng dùng đc, kể cả người khuyết tật.
+- Tải pkg eslint-config-next để dùng phát hiện những Accessibility issues, vd: tag <Image> ko có field alt,...
+- Cách cải thiện Form Accessibility: 
++ Dùng Semantic HTML (<input>, <option>,...) thay vì <div>. Assistive technologies (AT) sẽ có thể hỗ trợ.
++ Labelling: dùng <label> + htmlFor.
++ Focus Outline: Focus vào ô input khi đang nhập bằng cách outline nó.
+- Form validation:
++ Client side: có 1 vài cách, đơn giản nhất là để field required thẳng vào <input>, <select>,...
++ Server side: sử dụng useActionState hook.
+14.
 
 
 
