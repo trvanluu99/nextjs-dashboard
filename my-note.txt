@@ -82,6 +82,10 @@ Note học NextJS. Chapter:
 + Client side: có 1 vài cách, đơn giản nhất là để field required thẳng vào <input>, <select>,...
 + Server side: sử dụng useActionState hook.
 14.
+- You'll notice the page imports <LoginForm />, which you'll update later in the chapter. This component is wrapped with React <Suspense> because it will access information from the incoming request (URL search params).???
+- Authen bằng pkg next-auth.
+- Để production của project mình trên Vercel cũng có biến này thì mình vào Vercel > Project này > Environment Variables ở sidebar và add thêm key AUTH_SECRET. (Nó có cho mình page hướng dẫn: https://vercel.com/docs/environment-variables)
+15.
 
 
 
