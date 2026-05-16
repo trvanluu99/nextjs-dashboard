@@ -86,6 +86,24 @@ Note học NextJS. Chapter:
 - Authen bằng pkg next-auth.
 - Để production của project mình trên Vercel cũng có biến này thì mình vào Vercel > Project này > Environment Variables ở sidebar và add thêm key AUTH_SECRET. (Nó có cho mình page hướng dẫn: https://vercel.com/docs/environment-variables)
 15.
+- Adding Metadata good for SEO. It works behind the scenes, embedded within the page's HTML, usually within the <head> element.
+- Các loại common metadata: title, description, keywords (để indexing page của mình), Open Graph (để share trên mạng xã hội), favicon (icon cạnh title).
+<title>Page Title</title>
+<meta name="description" content="A brief description of the page content." />
+<meta name="keywords" content="keyword1, keyword2, keyword3" />
+<meta property="og:title" content="Title Here" />
+<meta property="og:description" content="Description Here" />
+<meta property="og:image" content="image_url_here" />
+<link rel="icon" href="path/to/favicon.ico" />
+- Có 2 cách add:
++ Config-based: Export a static metadata object or a dynamic generateMetadata function in a layout.js or page.js file (ưu tiên đặt ở layout, nếu layout ko có mới đặt ở page).
+.) Object ở page/layout con sẽ có độ ưu tiên lớn hơn thằng cha.
+.) Có thể dùng biến %s ở title để ghép các title ở page/layout con vào title template được đặt ở page/layout cha.
++ File-based: Next.js has a range of special files that are specifically used for metadata purposes. For ex:
+.) favicon.ico, apple-icon.jpg, and icon.jpg: Utilized for favicons and icons
+.) opengraph-image.jpg and twitter-image.jpg: Employed for social media images
+.) ...
+
 
 
 

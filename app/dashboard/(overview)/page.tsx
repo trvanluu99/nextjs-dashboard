@@ -6,6 +6,11 @@ import { fetchCardData } from '@/app/lib/data';
 import { Suspense } from 'react';
 import { CardsSkeleton, RevenueChartSkeleton } from '@/app/ui/skeletons';
 import { LatestInvoicesSkeleton } from '@/app/ui/skeletons';
+import { Metadata } from 'next';
+ 
+export const metadata: Metadata = {
+  title: 'Dashboard',
+};
  
 export default async function Page() {
   return (
